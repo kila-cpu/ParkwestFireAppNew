@@ -188,7 +188,11 @@ table.full tr.hit td{background:var(--ok-bg);font-weight:700}
 .guidecard.on{border:2px solid var(--red)}
 .gsteps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:15px}
 details summary{cursor:pointer}
-details.guidebox summary{list-style-position:outside}
+details.guidebox summary{list-style:none;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+details.guidebox summary::-webkit-details-marker{display:none}
+details.guidebox summary::before{content:"";flex:0 0 auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-right:2px;transition:transform .15s;align-self:center}
+details.guidebox[open] summary::before{transform:rotate(45deg)}
+details.guidebox summary .sub{flex-basis:100%;padding-left:18px;font-weight:400}
 @media (min-width: 600px){ .guides{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (min-width: 900px){ .guides{grid-template-columns:repeat(3,minmax(0,1fr))} }
 /* ---------- desktop ---------- */
@@ -807,7 +811,7 @@ function vReview(d, row, q, mode){
         </section>
         ${tbl}
         <section class="card stack"><h3>Exactly as written on the drawing</h3><ul class="list">${d.callouts.map(c => `<li><span class="dot">•</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
-        <details class="card guidebox"><summary><strong>General instructions — ${esc(g.name)}</strong><span class="small muted"> · ${g.steps.length} steps from page 1 of the guide</span></summary>
+        <details class="card guidebox"><summary><strong>General instructions — ${esc(g.name)}</strong><span class="small muted sub">${g.steps.length} steps from page 1 of the guide</span></summary>
           <div class="stack" style="margin-top:10px">
             <ol class="gsteps">${g.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
             ${g.rules.map(r => `<div><strong>${esc(r.k)}</strong><p class="small" style="margin:4px 0 0">${esc(r.t)}</p></div>`).join("")}
