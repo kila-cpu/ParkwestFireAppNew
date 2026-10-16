@@ -1,0 +1,12 @@
+{
+  "name": "parkwest-installer-guide-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Parkwest Fire Protection — Installer Guide (interactive prototype: find, scan and browse tested fire-stopping details)",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

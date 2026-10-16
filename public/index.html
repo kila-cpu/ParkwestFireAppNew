@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parkwest Installer Guide</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8102E; --red-dk:#9E0B22; --ink:#1B1C1E; --paper:#F5F4F1; --surface:#FFFFFF; --line:#DEDAD3;
+  --muted:#565961; --soft:#EDEAE4; --ok-bg:#DCE8FB; --ok:#173E80; --warn-bg:#FFF1DC; --warn:#6B3600; --warn-line:#B85C00;
+  --err:#B3261E; --err-bg:#FDECEA; --good:#1E6B3A; --good-bg:#DFF2E5;
+  --dark:#1B1C1E; --nav-on:#C8102E; --max:760px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --ink:#ECECEC; --paper:#141516; --surface:#1F2022; --line:#35373B; --muted:#A9ACB2; --soft:#2A2B2E;
+    --ok-bg:#1C2D4A; --ok:#B9D0F7; --warn-bg:#3A2A14; --warn:#F5C98E; --warn-line:#D98A2B; --err:#FF8A80; --err-bg:#3A1A18; --good:#9BDDB0; --good-bg:#16301F; --dark:#0E0F10; --nav-on:#FF6B7F; }
+}
+:root[data-theme="dark"]{ --ink:#ECECEC; --paper:#141516; --surface:#1F2022; --line:#35373B; --muted:#A9ACB2; --soft:#2A2B2E;
+  --ok-bg:#1C2D4A; --ok:#B9D0F7; --warn-bg:#3A2A14; --warn:#F5C98E; --warn-line:#D98A2B; --err:#FF8A80; --err-bg:#3A1A18; --good:#9BDDB0; --good-bg:#16301F; --dark:#0E0F10; --nav-on:#FF6B7F; }
+html{scroll-padding-top:150px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.4 Barlow,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%;padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #5B9BF0;outline-offset:2px}
+img{max-width:100%}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 16px 150px}
+.top{background:#fff;border-bottom:1px solid #E2DED6;position:sticky;top:0;padding-top:env(safe-area-inset-top,0px);z-index:20}
+.top-in{max-width:var(--max);margin:0 auto;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top img{height:46px;width:auto;display:block}
+.tag{font:700 14px/1 "Barlow Condensed",sans-serif;letter-spacing:.5px;padding:5px 8px;border-radius:6px;background:#1B1C1E;color:#fff;white-space:nowrap}
+.tabs{display:none}
+.trial{background:var(--warn-bg);color:var(--warn);font-size:14px;padding:8px 16px;border-bottom:1px solid var(--line)}
+.trial-in{max-width:var(--max);margin:0 auto}
+h1,h2,h3{font-family:"Barlow Condensed",sans-serif;line-height:1.05;margin:0}
+h1{font-size:32px} h2{font-size:24px} h3{font-size:20px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.btn{color:inherit;min-height:48px;padding:0 18px;border-radius:10px;border:2px solid var(--ink);background:var(--surface);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.dark{background:var(--dark);border-color:var(--dark);color:#fff}
+.btn.block{width:100%}
+.btn.sm{min-height:44px}
+.btn.ghost{border-color:transparent;background:none;text-decoration:underline}
+.btn:disabled{opacity:.55;cursor:default}
+.chip{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--ink);background:var(--surface);font-weight:600}
+.chip.on{background:var(--ink);color:var(--paper)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:4px 8px;border-radius:6px}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.grey{background:var(--soft);color:var(--muted)}
+.badge.good{background:var(--good-bg);color:var(--good)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:15px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:600}
+.note{font-size:14px;margin:0;padding:10px 12px;border-radius:10px;background:var(--ok-bg);color:var(--ok)}
+.note.warn{background:var(--warn-bg);color:var(--warn)}
+.warnbox{background:var(--warn-bg);border:2px solid var(--warn-line);border-radius:12px;padding:14px;color:var(--warn)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.list li{display:flex;gap:10px;align-items:flex-start}
+.dot{flex:0 0 22px;height:22px;border-radius:11px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px}
+.linkbtn{background:none;border:none;padding:0;color:inherit;text-decoration:underline;font-weight:700}
+input[type=text],input[type=number],input[type=search],textarea.f{min-height:48px;padding:0 12px;border-radius:10px;border:1px solid #B9B3A8;background:var(--surface);width:100%}
+textarea.f{padding:10px 12px;min-height:64px;resize:vertical}
+.spin{width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s 0.8s linear infinite;display:inline-block;flex:0 0 auto}
+@keyframes s{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation-duration:3s}}
+.hide{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.desk-only{display:none}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:30}
+.nav-in{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.nav button{background:none;border:none;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;color:var(--muted)}
+.nav button.on{color:var(--nav-on);font-weight:700}
+
+/* stepper */
+.stepper{position:sticky;top:calc(63px + env(safe-area-inset-top,0px));z-index:15;background:var(--paper);margin:0 -16px;padding:10px 16px 8px;border-bottom:1px solid var(--line)}
+.stepper ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.stepper li button{width:100%;background:none;border:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--muted);text-align:center;line-height:1.1}
+.stepper li button:disabled{cursor:default}
+.stepper .n{width:28px;height:28px;border-radius:14px;border:2px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.stepper li.done .n{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.stepper li.cur .n{background:var(--red);border-color:var(--red);color:#fff}
+.stepper li.cur button{color:var(--ink);font-weight:700}
+.stephead{display:flex;flex-direction:column;gap:4px}
+.stephead .eyebrow{font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--red)}
+
+/* step 1-2 */
+.two{display:flex;flex-direction:column;gap:12px}
+.drop{border:2px dashed #8A857C;border-radius:14px;padding:28px 16px;text-align:center;background:var(--surface);display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer}
+.drop.over{border-color:var(--red);background:var(--warn-bg)}
+.drop .hint-desk{display:none}
+.scanimg{border-radius:12px;max-height:340px;object-fit:cover;width:100%;background:var(--soft);display:block}
+.seen{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.seen li{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.seen li:first-child{border-top:none}
+.seen .k{color:var(--muted)}
+.seen .v{font-weight:700;text-align:right}
+.seen .v.no{color:var(--muted);font-weight:500}
+
+/* step 3 form */
+.form{display:grid;grid-template-columns:1fr;gap:10px}
+.field{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.field .lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.field .lab strong{font-size:17px}
+.req{font-size:12px;font-weight:700;color:var(--red)}
+.opt{font-size:12px;color:var(--muted)}
+.field.photo{border-color:var(--warn-line);background:var(--warn-bg)}
+.field.photo .from{font-size:12px;font-weight:700;color:var(--warn)}
+.field.miss{border:2px solid var(--err);background:var(--err-bg)}
+.field.miss .lab strong::after{content:" — needed";color:var(--err);font-size:14px}
+.field .help{font-size:13px;color:var(--muted);margin:0}
+.numrow{display:flex;gap:8px;align-items:center}
+.numrow input{max-width:160px}
+.numrow .x{font-weight:700}
+.actionbar{position:sticky;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:14;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;gap:10px;align-items:center;box-shadow:0 -4px 16px rgba(0,0,0,.08);margin-top:6px}
+.actionbar .msg{flex:1;font-size:14px}
+.actionbar .btn{flex:0 0 auto}
+details.desc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+details.desc summary{font-weight:700;cursor:pointer}
+
+/* step 4 results */
+.yours{display:flex;flex-wrap:wrap;gap:6px}
+.yours span{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:14px;font-weight:600}
+.results{display:grid;grid-template-columns:1fr;gap:12px}
+.result{border:2px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column}
+.result .body{padding:14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.result .body .btn{margin-top:auto}
+.thumb{width:100%;height:180px;object-fit:contain;background:#fff;border-bottom:1px solid var(--line);display:block}
+.insline{border-radius:10px;padding:8px 10px;background:var(--soft);font-size:15px}
+.insline b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+.chiprow{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chiprow::-webkit-scrollbar{display:none}
+.chiprow .chip{flex:0 0 auto}
+
+/* step 5 review */
+.callout{border-radius:12px;padding:14px;border:2px solid var(--ok);background:var(--ok-bg);color:var(--ok);display:flex;flex-direction:column;gap:6px}
+.callout h3{color:inherit}
+.callout.warn{border-color:var(--warn-line);background:var(--warn-bg);color:var(--warn)}
+.callout.none{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.method{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.method li{border-top:1px solid var(--line)}
+.method li:first-child{border-top:none}
+.method label{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 0;cursor:pointer;align-items:start}
+.method input{width:26px;height:26px;margin:0;accent-color:var(--good)}
+.method .t{font-weight:700;display:block}
+.method .x{display:block;color:var(--muted);font-size:15px;margin-top:2px}
+.method .q{display:block;font-size:14px;font-weight:700;color:var(--ok);margin-top:4px}
+.method li.ticked .t{text-decoration:line-through;color:var(--muted)}
+.progress{height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--good);transition:width .2s}
+.mats{width:100%;border-collapse:collapse;font-size:15px}
+.mats td{padding:8px 0;border-top:1px solid var(--line);vertical-align:top}
+.mats tr:first-child td{border-top:none}
+.mats td.qty{text-align:right;font-weight:700;white-space:nowrap;padding-left:12px}
+.drawing{background:#fff;border-radius:12px;border:1px solid var(--line);overflow:auto;-webkit-overflow-scrolling:touch}
+.drawing img{display:block;width:100%;height:auto}
+.drawing.zoom img{width:220%;max-width:none}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table.full{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+table.full th,table.full td{padding:8px 10px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+table.full th{background:var(--soft);border-top:none}
+table.full tr.hit td{background:var(--ok-bg);font-weight:700}
+.donebox{border-radius:12px;padding:14px;background:var(--good-bg);color:var(--good);border:2px solid var(--good);font-weight:700}
+
+/* library */
+.libgrid{display:grid;grid-template-columns:1fr;gap:8px}
+.libitem{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;width:100%}
+.libitem:hover{border-color:var(--ink)}
+.libitem img{width:96px;height:72px;object-fit:contain;background:#fff;border-radius:6px}
+.libitem .kinds{display:flex;gap:4px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:#1B1C1E;color:#fff;padding:12px 16px;border-radius:10px;z-index:50;max-width:90%}
+
+@media (max-width: 420px){ .stepper .lbl{font-size:11px} }
+
+.badge.prod{background:var(--dark);color:#fff}
+.guides{display:grid;grid-template-columns:1fr;gap:8px}
+.guidecard{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.guidecard:hover{border-color:var(--ink)}
+.guidecard.on{border:2px solid var(--red)}
+.gsteps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+details summary{cursor:pointer}
+details.guidebox summary{list-style-position:outside}
+@media (min-width: 600px){ .guides{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (min-width: 900px){ .guides{grid-template-columns:repeat(3,minmax(0,1fr))} }
+/* ---------- desktop ---------- */
+@media (min-width: 900px){
+  :root{--max:1200px}
+  .nav{display:none}
+  .wrap{padding-bottom:64px}
+  .tabs{display:flex;gap:4px;margin-left:auto;margin-right:12px}
+  .tabs button{background:none;border:none;border-radius:8px;min-height:44px;padding:0 14px;display:flex;align-items:center;gap:8px;font-weight:600;color:#565961}
+  .tabs button:hover{background:#F0EDE8}
+  .tabs button.on{color:#C8102E;background:#FBE9EC}
+  .toast{bottom:24px}
+  .stepper{margin:0;padding:14px 0 12px;border-bottom:none;background:var(--paper)}
+  .stepper ol{gap:0}
+  .stepper li button{flex-direction:row;justify-content:flex-start;gap:8px;font-size:15px}
+  .actionbar{bottom:16px}
+  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+  .form{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form .wide{grid-column:1 / -1}
+  .results{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .review{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+  .review .side{position:sticky;top:150px}
+  .libgrid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+  .drop{padding:48px 24px}
+  .drop .hint-desk{display:block}
+  .desk-only{display:initial}
+  .btn.desk-only{display:inline-flex}
+  .mob-only{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <img src="logo.png" alt="Parkwest Fire Protection">
+  <nav class="tabs" aria-label="Main">
+    <button data-go="scan" id="t-scan"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M4 8h3l2-3h6l2 3h3v12H4z"/></svg>Scan</button>
+    <button data-go="find" id="t-find"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Find</button>
+    <button data-go="library" id="t-library"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/></svg>Library</button>
+  </nav>
+  <span class="tag">Installer Guide</span>
+</div></header>
+<div class="trial"><div class="trial-in">Demo version. Details are read automatically from the six Protecta guides — always check the drawing and the guide before installing.</div></div>
+<main class="wrap" id="app" aria-live="polite"></main>
+<nav class="nav" aria-label="Main"><div class="nav-in">
+ <button data-go="scan" id="n-scan"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M4 8h3l2-3h6l2 3h3v12H4z"/></svg>Scan</button>
+ <button data-go="find" id="n-find"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Find</button>
+ <button data-go="library" id="n-library"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/></svg>Library</button>
+</div></nav>
+<div id="toast" class="toast hide" role="status"></div>
+<input type="file" accept="image/*" capture="environment" id="camfile" class="sr" tabindex="-1" aria-hidden="true">
+<input type="file" accept="image/*" id="pickfile" class="sr" tabindex="-1" aria-hidden="true">
+<script>
+let LIB = [], GUIDES = [], byId = {}, guideBy = {};
+function img(id){ return `drawings/${id}.webp`; }
+const isDesk = () => window.matchMedia("(min-width: 900px)").matches;
+
+/* ---------- fields ---------- */
+const SERVICES = [["copper","Copper pipe"],["steel","Steel / iron / gas pipe"],["alupex","Alupex / multilayer pipe"],["pex","PEX pipe-in-pipe"],["plastic","Plastic pipe"],["cables","Cables / cable tray"],["conduit","Conduit"],["busbar","Bus-bar"],["trunking","Trunking / duct"],["unistrut","Unistrut channel"],["linear","Linear joint (gap seal)"],["empty","Empty hole (no service)"],["mixed","Several services in one hole"]];
+const SVC_NAME = Object.fromEntries(SERVICES);
+const KIND_SHORT = {copper:"Copper",steel:"Steel",alupex:"Alupex",pex:"PEX",plastic:"Plastic",cables:"Cables",conduit:"Conduit",busbar:"Bus-bar",trunking:"Trunking",unistrut:"Unistrut",linear:"Linear joint",empty:"Empty hole"};
+const WALLS = [["Drywall","Drywall / stud partition"],["Rigid","Block, brick or concrete"],["Timber","Timber stud wall"],["Panel","Sandwich panel wall"]];
+const FLOORS = [["Rigid","Concrete floor"],["Timber","Timber floor"],["Flexible","Joisted floor with ceiling"],["Composite","Composite floor (steel deck)"]];
+const WALL_NAME = Object.fromEntries(WALLS), FLOOR_NAME = Object.fromEntries(FLOORS);
+const PLASTICS = [["PVC","PVC-U / PVC-C"],["PE","PE, ABS or SAN+PVC"],["PP","PP"],["PB","Polybutylene (PB)"],["Composite","Composite / acoustic (branded)"]];
+const BRANDS = ["Aquatherm Green SDR9","BluePower","Geberit Silent-PP","Huliot Ultra Silent","LK PAL Universal","Polo-Kal NG","Rehau Raupiano Plus","Uponor Decibel","Valsir Blackfire","Valsir PP3","Valsir Triplus","Wavin AS+","Wavin SiTech"];
+const INSUL = [["","Not sure"],["none","None — bare pipe"],["elastomeric","Elastomeric (Armaflex)"],["pe","PE foam"],["phenolic","Phenolic foam"],["pu","PU foam"],["stone","Stone wool"],["glass","Glass wool"]];
+const INS_NAME = {none:"Bare pipe",elastomeric:"Elastomeric",pe:"PE foam",phenolic:"Phenolic foam",pu:"PU foam",stone:"Stone wool",glass:"Glass wool",any:"Pipe insulation"};
+const RATINGS = [20,30,45,60,90,120,180,240];
+const SIZED = ["copper","steel","alupex","pex","plastic","cables","conduit"];
+const INSULABLE = ["copper","steel","alupex","pex","plastic"];
+const DIA_CHIPS = {copper:[15,22,28,35,42,54,89],steel:[22,40,63,110,168,219,324],alupex:[16,20,32,50,75],pex:[25,32,54],plastic:[40,50,110,125,160,200],cables:[21,50,80,100],conduit:[16,20,25,32,40]};
+const FIELDS = {
+  surface:{label:"Wall or floor"}, base:{label:"Wall type"}, thk:{label:"Thickness"}, service:{label:"Service type"},
+  dia:{label:"Outside diameter (Ø)"}, plasticMat:{label:"Plastic type"}, brand:{label:"Pipe brand"},
+  insulation:{label:"Insulation already on the pipe"}, rating:{label:"Fire rating needed"}, opening:{label:"Opening size"}
+};
+const STEPS = ["Photo","Read","Details","Matches","Install"];
+
+let S = {view:"flow", step:1, photo:null, q:{}, fromPhoto:{}, touched:false, askText:"", note:null,
+  sel:null, done:{}, zoom:false, prodFilter:"all", libGuide:"all", libKind:"all", libSearch:"", libDetail:null, libLimit:60, guideView:null};
+
+function baseLabel(q){ return q.surface === "Floor" ? "Floor type" : "Wall type"; }
+function label(k, q = S.q){ return k === "base" ? baseLabel(q) : k === "opening" && q.service === "linear" ? "Joint width" : FIELDS[k].label; }
+function required(q){
+  const r = ["surface","base","thk","service"];
+  if (SIZED.includes(q.service)) r.push("dia");
+  if (q.service === "plastic"){ r.push("plasticMat"); if (q.plasticMat === "Composite") r.push("brand"); }
+  r.push("rating","opening");
+  return r;
+}
+const isEmpty = v => v === undefined || v === null || v === "";
+const filled = (k, q) => k === "opening" ? (q.service === "linear" ? q.openW > 0 : q.openW > 0 && q.openH > 0) : !isEmpty(q[k]);
+const missingOf = q => required(q).filter(k => !filled(k, q));
+
+/* ---------- matching (deterministic, from the 6 Protecta guides only) ---------- */
+function insFits(types, ins){ return types.includes(ins) || types.includes("any"); }
+function insCheck(d, q){
+  // returns null when fine, "fail" when the detail is for a different insulation, "check" when it can't be told
+  if (!INSULABLE.includes(q.service) || !q.insulation) return null;
+  const m = d.ins.mode;
+  if (m === "na" || m === "unknown") return m === "unknown" ? "check" : null;
+  if (q.insulation === "none") return m === "continuous" ? "fail" : null;
+  if (m !== "continuous") return "fail";
+  return d.ins.opts.some(o => insFits(o.types, q.insulation)) ? null : "fail";
+}
+function pickOpt(d, q){
+  // size / rating tables: smallest size bracket that takes the pipe, then the best rating in it
+  let opts = d.opts.filter(o => (!o.kinds || o.kinds.includes(q.service)) && o.dia && q.dia <= o.dia && (!o.dmin || q.dia >= o.dmin));
+  if (q.service === "plastic" && q.plasticMat){
+    const want = q.plasticMat === "Composite" ? q.brand : q.plasticMat;
+    const withMat = opts.filter(o => o.mats && o.mats.length);
+    if (withMat.length) opts = opts.filter(o => !o.mats.length || o.mats.includes(want) || (q.plasticMat !== "Composite" && o.mats.includes(q.plasticMat)));
+  }
+  if (q.insulation && q.insulation !== "none" && INSULABLE.includes(q.service)){
+    const rx = {elastomeric:/elastomeric/i, pe:/PE foam|PE insulation/i, phenolic:/phenolic/i, pu:/\bPU\b/i, stone:/stone/i, glass:/glass/i}[q.insulation];
+    const tagged = opts.filter(o => o.extra.some(x => /insulation/i.test(x)));
+    if (tagged.length) opts = opts.filter(o => !o.extra.some(x => /insulation/i.test(x)) || o.extra.some(x => rx.test(x)));
+  }
+  if (!opts.length) return null;
+  const minDia = Math.min(...opts.map(o => o.dia));
+  const bracket = opts.filter(o => o.dia === minDia).sort((a,b) => b.ei - a.ei);
+  const ok = bracket.filter(o => o.ei >= q.rating).sort((a,b) => a.ei - b.ei);
+  return ok[0] || {...bracket[0], tooLow:true};
+}
+function apFits(a, W, H){
+  if (a.note) return true;
+  if (a.dia) return Math.max(W, H) <= a.dia;
+  if (a.w === "unlimited") return Math.min(W, H) <= a.h && (H <= a.h || W <= a.h);
+  if (a.any) return (W <= a.w && H <= a.h) || (W <= a.h && H <= a.w);
+  return W <= a.w && H <= a.h;
+}
+function apText(a){
+  if (a.note) return a.note;
+  if (a.dia) return `Ø${a.dia} mm round`;
+  if (a.w === "unlimited") return `any width × ${a.h} mm high`;
+  return `${a.w} × ${a.h} mm`;
+}
+function openingRule(d){
+  if (d.kinds.includes("linear") && d.sealW) return `Joint up to ${d.sealW} mm wide`;
+  if (d.aps.length) return "Opening up to " + d.aps.map(apText).join(", or ");
+  if (d.gapMax) return `Gap around the service up to ${d.gapMax} mm`;
+  if (d.sealW) return `Seal up to ${d.sealW} mm wide`;
+  return "";
+}
+function checkDetail(d, q){
+  const fails = [], checks = [];
+  if (!d.surfaces.includes(q.surface)) return {fails:["surface"]};
+  if (!(q.surface === "Wall" ? d.walls : d.floors).includes(q.base)) return {fails:["base"]};
+  if (!d.kinds.includes(q.service)) return {fails:["service"]};
+  if (d.minThk && q.thk < d.minThk) fails.push({k:"thk", need:`${q.surface === "Wall" ? "a wall" : "a floor"} at least ${d.minThk} mm thick`});
+  if (!d.minThk) checks.push("thickness");
+  let row = null;
+  const ins = insCheck(d, q);
+  if (ins === "fail") return {fails:["insulation"]};
+  if (ins === "check" && !(d.opts && d.opts.some(o => o.extra.some(x => /insulation/i.test(x))))) checks.push("insulation");
+  if (d.opts && SIZED.includes(q.service)){
+    row = pickOpt(d, q);
+    if (!row) return {fails:[{k:"dia", need:`the pipe sizes in its table (${d.minDia && d.minDia === d.maxDia ? "Ø" + d.maxDia : "up to Ø" + d.maxDia} mm)`}]};
+    if (row.tooLow) fails.push({k:"rating", need:`ratings up to EI ${row.ei}`, ei:row.ei});
+  } else {
+    if (q.service === "plastic" && q.plasticMat){
+      const real = d.mats.filter(m => m !== "Composite");
+      if (q.plasticMat === "Composite"){ if (!d.mats.includes("Composite") && !d.mats.includes(q.brand) && real.length) return {fails:["plasticMat"]}; if (real.length && !real.includes(q.brand) && !d.mats.includes("Composite")) return {fails:["plasticMat"]}; }
+      else if (real.length && !real.includes(q.plasticMat)) return {fails:["plasticMat"]};
+    }
+    if (SIZED.includes(q.service)){
+      if (d.maxDia && q.dia > d.maxDia) fails.push({k:"dia", need:`sizes up to Ø${d.maxDia} mm`});
+      if (d.minDia && q.dia < d.minDia) fails.push({k:"dia", need:`sizes from Ø${d.minDia} mm`});
+      if (!d.maxDia) checks.push("size");
+    }
+    if (!d.ei || d.ei < q.rating) fails.push({k:"rating", need: d.ei ? `ratings up to EI ${d.ei}` : "integrity (E) only", ei:d.ei||0});
+  }
+  // opening / joint / gap
+  if (q.service === "linear"){
+    if (d.sealW && q.openW > d.sealW) fails.push({k:"opening", need:`joints up to ${d.sealW} mm wide`});
+    if (!d.sealW) checks.push("opening");
+  } else if (d.svcRect && ["trunking","busbar","unistrut"].includes(q.service)){
+    // opening is the service size plus the allowed gap
+    const g = 2 * (d.gapMax || 0), [a, b] = d.svcRect;
+    if (!((q.openW <= a + g && q.openH <= b + g) || (q.openW <= b + g && q.openH <= a + g))) fails.push({k:"opening", need:`${KIND_SHORT[q.service].toLowerCase()} up to ${a} × ${b} mm${d.gapMax ? ` (+ ≤${d.gapMax} mm gap)` : ""}`});
+  } else if (d.aps.length){
+    if (!d.aps.some(a => apFits(a, q.openW, q.openH))) fails.push({k:"opening", need:`an opening up to ${d.aps.map(apText).join(" or ")}`});
+    if (d.aps.some(a => a.note)) checks.push("opening");
+  } else if (d.gapMax && q.dia){
+    // gap is measured from the outside of any insulation the detail runs through the seal
+    const insT = d.ins.mode === "continuous" && q.insulation !== "none" ? Math.max(0, ...d.ins.opts.flatMap(o => String(o.thk || "0").split("-").map(Number))) : 0;
+    const gap = (Math.min(q.openW, q.openH) - q.dia - 2*insT) / 2;
+    if (gap > d.gapMax) fails.push({k:"opening", need:`a gap around the ${insT ? "insulation" : "service"} of no more than ${d.gapMax} mm (yours is about ${Math.round(gap)} mm)`});
+    else checks.push("gap");
+  } else checks.push("opening");
+  return {fails, row, checks};
+}
+function findMatches(q){
+  const hits = [], near = [];
+  for (const d of LIB){
+    const r = checkDetail(d, q);
+    if (!r.fails.length) hits.push({d, row:r.row, checks:r.checks});
+    else if (r.fails.length === 1 && typeof r.fails[0] === "object") near.push({d, why:r.fails[0]});
+  }
+  const ei = h => h.row ? h.row.ei : h.d.ei;
+  hits.sort((a,b) => ei(a) - ei(b) || (a.checks.length - b.checks.length) || a.d.callouts.length - b.d.callouts.length);
+  near.sort((a,b) => (b.why.ei||0) - (a.why.ei||0));
+  return {hits, near};
+}
+
+/* ---------- what the installer has to do ---------- */
+const lc = t => t.charAt(0).toLowerCase() + t.slice(1);
+function insShort(d, row){
+  const extra = row && row.extra.find(x => /insulation/i.test(x));
+  if (extra) return extra.replace(/^[^:]*:\s*/, "");
+  const i = d.ins;
+  if (i.mode === "na") return d.kinds.includes("cables") ? "None — cables" : "Not applicable";
+  if (i.mode === "none") return "None needed";
+  if (i.mode === "unknown") return "See the drawing";
+  if (i.mode === "local") return i.opts[0].t;
+  return i.opts.map(o => o.t).join(" — or — ");
+}
+function insCallout(d, row, q){
+  const i = d.ins, has = INSULABLE.includes(q.service) ? q.insulation : "";
+  const extra = row && row.extra.find(x => /insulation/i.test(x));
+  if (extra) return {cls:"warn", title:"Pipe insulation from the table", text:extra.replace(/^[^:]*:\s*/, "") + ". Measure the insulation on site and check it matches."};
+  if (i.mode === "na") return {cls:"none", title:"No pipe insulation involved", text:"This detail is for " + (d.kinds.map(k => (KIND_SHORT[k]||k).toLowerCase()).join(" / ")) + "."};
+  if (i.mode === "unknown") return {cls:"warn", title:"Insulated service — check the drawing", text:"The drawing shows insulation but the guide couldn’t read its type or thickness. Check the drawing before you start."};
+  if (i.mode === "none") return {cls:"none", title:"No insulation needed", text: has && has !== "none" ? `This detail was tested without pipe insulation. You said the pipe has ${lc(INS_NAME[has])} — check with the office first.` : "This detail was tested on bare pipe."};
+  if (i.mode === "local") return {cls:"warn", title:"Fit insulation locally at the seal", text:i.opts.map(o => o.t).join(" Or: ") + (has && has !== "none" ? "" : " This goes on even if the rest of the pipe is bare.")};
+  const what = i.opts.map(o => o.t).join(" — or — ");
+  if (has && has !== "none") return {cls:"", title:`Keep the pipe insulation running through`, text:`Required: ${what}. You said the pipe already has ${lc(INS_NAME[has])} — measure it and check the thickness matches.`};
+  return {cls:"warn", title:"Continuous pipe insulation needed", text:`Required: ${what}. It must run unbroken through the seal — fit it before sealing if it isn’t there.`};
+}
+// sort each drawing callout into a step the installer can follow
+const CATS = [
+  ["service",  "Check the service",            /^(?!.*(Protecta|FR |EX Mortar|insulation|wool|sealed|screw|aperture|gap)).*(pipe|cable|conduit|tray|bus-?bar|trunking|duct|unistrut|channel|conductor|bundle)/i],
+  ["frame",    "Frame the aperture",           /framed aperture|gypsum|lining/i],
+  ["insul",    "Pipe insulation",              /continuous .*insulation|insulation of (glass|stone)|(stone|glass)[- ]?(or stone )?wool .*(installed|≥\s*\d+\s*cm)|PU foam|phenolic/i],
+  ["backing",  "Fit the backing / shutter",    /backing|shutter|Mineral Fibre|stone wool depth|plugged with|plug/i],
+  ["board",    "Fit the FR Board",             /FR Board|Flexi Board/i],
+  ["mortar",   "Install the EX Mortar",        /EX Mortar|mortar/i],
+  ["collar",   "Fit the FR Collar",            /FR Collar|collar/i],
+  ["wrap",     "Fit the FR Pipe Wrap",         /Pipe Wrap/i],
+  ["graphite", "Apply FR Graphite",            /FR Graphite|Graphite/i],
+  ["acrylic",  "Apply FR Acrylic",             /FR Acrylic depth|Acrylic .*depth|depth .*Acrylic|bead of/i],
+  ["fix",      "Coat and fix",                 /FR Coating|screw|bonded|fixed|fixing|washer|bracket|support/i],
+  ["seal",     "Seal all services and gaps",   /sealed with|must be sealed|FR Acrylic/i],
+];
+function catOf(t){ for (const [k, title, rx] of CATS) if (rx.test(t)) return k; return "note"; }
+function method(d, row, q){
+  const steps = [], base = q.surface === "Floor" ? FLOOR_NAME[q.base] : WALL_NAME[q.base];
+  steps.push({t:"Check the construction", x:`Tested in: ${d.cons.toLowerCase().replace(/(^|\s)≥/g, "$1≥")}.`, q:q.thk ? `Yours: ${q.thk} mm ${(base||"").toLowerCase()}${d.minThk ? (q.thk >= d.minThk ? " ✓" : "") : " — no minimum given, check the guide’s rules"}` : ""});
+  const rule = openingRule(d);
+  if (d.bundleMax && d.bundleMax !== d.maxDia) steps.push({t:"Check the cable sizes", x:`Single cables up to Ø${d.maxDia} mm; bundles up to Ø${d.bundleMax} mm.`, q:q.dia ? `Yours: Ø${q.dia} mm` : ""});
+  if (rule) steps.push({t: q.service === "linear" ? "Check the joint" : "Check the opening", x:rule + ".", q:q.openW ? (q.service === "linear" ? `Yours: ${q.openW} mm wide` : `Yours: ${q.openW} × ${q.openH} mm${q.dia && d.gapMax ? ` (gap ≈ ${Math.max(0, Math.round((Math.min(q.openW,q.openH)-q.dia)/2))} mm each side)` : ""}`) : ""});
+  const groups = {};
+  for (const c of d.callouts){ if (/aperture|seal width|joint width|joints within/i.test(c) && !/sealed|FR Board|Mortar|wool/i.test(c)) continue; const k = catOf(c); (groups[k] = groups[k] || []).push(c); }
+  if (row) (groups.table = []).push(`Your row in the table: ${row.label}${row.dia ? ` (≤Ø${row.dia} mm)` : ""}${row.extra.length ? " · " + row.extra.join(" · ") : ""} · EI ${row.ei}${row.ends ? " " + row.ends : ""}`);
+  const order = ["service","table","frame","insul","backing","board","mortar","collar","wrap","graphite","acrylic","fix","seal","note"];
+  const titles = Object.fromEntries(CATS.map(c => [c[0], c[1]])); titles.table = "Use the right size from the table"; titles.note = "Also on the drawing";
+  for (const k of order) if (groups[k]) steps.push({t:titles[k], x:groups[k].join(" • ")});
+  const ends = row ? row.ends : d.ends;
+  if (ends) steps.push({t:"Confirm the pipe ends", x:`Tested as ${ends} (first letter = fire side, second = other side; C = capped, U = uncapped). Check this suits the pipe system.`});
+  steps.push({t:"Final check against the drawing", x:"Compare the finished seal with the drawing, both sides, before you sign it off."});
+  return steps;
+}
+function quantities(d, row, q){
+  const out = [], txt = d.callouts.join(" • "), has = q.openW > 0 && (q.openH > 0 || q.service === "linear");
+  const W = q.openW || 0, H = q.service === "linear" ? 1000 : (q.openH || 0);
+  const b = txt.match(/(?:(\d)\s*layers?\s*(?:of\s*)?)?(\d+)\s*mm\s*FR Board\s*([12]-S)?/i);
+  if (b){
+    const layers = +(b[1] || 1), over = (txt.match(/oversailing aperture by (\d+)\s*mm/i) || [])[1];
+    const w = W + 2*(+over||0), h = H + 2*(+over||0);
+    out.push([`${b[2]} mm FR Board${b[3] ? " " + b[3] : ""}`, has ? `${(w*h/1e6*layers).toFixed(2)} m²` : `${layers} layer${layers>1?"s":""}`, has ? `${layers} layer${layers>1?"s":""} cut to ${w} × ${h} mm${over?` (opening + ${over} mm oversail each edge)`:""}${q.service==="linear"?" per metre of joint":""}` : "Add the opening size for a board area"]);
+  }
+  const m = txt.match(/EX Mortar\s*≥\s*(\d+)\s*mm/i);
+  if (m) out.push(["Protecta EX Mortar", has ? `≈${(W*H*(+m[1])/1e6).toFixed(1)} L` : `≥${m[1]} mm deep`, `${m[1]} mm deep across the opening${q.service==="linear"?", per metre of joint":""} (less the services)`]);
+  const wr = txt.match(/Pipe Wraps?\s*(\d+)\s*layers?\s*of\s*(\d+)\s*mm wide([^•]*)/i);
+  if (row && row.extra.some(x => /wrap/i.test(x))){ const x = row.extra.find(x => /wrap/i.test(x)); const n = +((x.match(/\((\d+) layer/)||[])[1]||1); out.push(["Protecta FR Pipe Wrap", `${n} layer${n>1?"s":""}`, x.replace(/^[^:]*:\s*/,"") + (/both sides/i.test(txt) ? " — each side" : "")]); }
+  else if (wr) out.push(["Protecta FR Pipe Wrap", `${wr[1]} layer${wr[1]>1?"s":""} × ${wr[2]} mm`, (/both sides/i.test(wr[3]) ? "Each side of the wall, per pipe" : wr[3].trim() || "Per pipe")]);
+  if (/FR Collar/i.test(txt)){ const x = row && row.extra.find(x => /collar/i.test(x)); out.push(["Protecta FR Collar", /both sides/i.test(txt) ? "2 per pipe" : "1 per pipe", x ? x.replace(/^[^:]*:\s*/,"min. height ") + " mm" : (txt.match(/[^•]*FR Collar[^•]*/i)||[""])[0].trim()]); }
+  const ins = d.ins.mode === "local" && d.ins.opts[0];
+  if (ins) out.push([`${ins.types.includes("glass") ? "Glass or stone" : "Stone"} wool pipe section${ins.thk ? ` ≥${ins.thk} mm` : ""}`, ins.len ? `${(2*ins.len/100).toFixed(1)} m per pipe` : "Per drawing", ins.len ? `${ins.len} cm each side` : ins.t]);
+  if (/backing|shutter|Stone wool depth|Mineral Fibre/i.test(txt)) out.push(["Stone wool backing / shutter", "As drawn", (txt.match(/[^•]*(backing|shutter|Stone wool depth|Mineral Fibre)[^•]*/i)||[""])[0].trim()]);
+  if (/FR Graphite/i.test(txt) || d.guide === "fr-graphite") out.push(["Protecta FR Graphite", "As needed", (txt.match(/[^•]*Graphite depth[^•]*/i)||["To the depth on the drawing"])[0].trim()]);
+  if (/FR Coating/i.test(txt)) out.push(["Protecta FR Coating", "As needed", "Board edges" + (/bonded/i.test(txt) ? " and bonding" : "")]);
+  if (/screw/i.test(txt)) out.push(["Screws / fixings", "As drawn", (txt.match(/[^•]*screw[^•]*/i)||[""])[0].trim()]);
+  if (/FR Acrylic/i.test(txt)) out.push(["Protecta FR Acrylic", "As needed", (txt.match(/[^•]*Acrylic depth[^•]*/i)||txt.match(/[^•]*sealed with[^•]*/i)||["Seal all services and gaps"])[0].trim()]);
+  return out;
+}
+
+/* ---------- read a typed description (on the device, no AI) ---------- */
+const WALL_WORDS = "wall|stud|drywall|dry\\s*lining|partition|plasterboard|block|brick|concrete|masonry|timber|panel|floor|slab|thick";
+const SVC_WORDS = "copper|steel|iron|gas|alupex|multi\\s*layer|mlcp|pex|pvc|upvc|pipe|plastic|hdpe|abs|pp|cable|tray|conduit";
+function parseText(raw){
+  let t = " " + raw.toLowerCase().replace(/[’']/g,"").replace(/,/g," , ") + " ";
+  const r = {};
+  const op = t.match(/(\d{2,4})\s*(?:mm)?\s*[x×]\s*(\d{2,4})/);
+  if (op){ r.openW = +op[1]; r.openH = +op[2]; t = t.replace(op[0], " "); }
+  if (/\b(floor|slab|deck)\b/.test(t)){ r.surface = "Floor"; r.base = /timber|joist/.test(t) ? (/ceiling|joist/.test(t) ? "Flexible" : "Timber") : /composite|steel deck/.test(t) ? "Composite" : /concrete|slab|rigid/.test(t) ? "Rigid" : undefined; }
+  else if (/\b(wall|stud|drywall|dry\s*lining|partition|plasterboard|block|brick|concrete|masonry|panel)/.test(t)){
+    r.surface = "Wall";
+    if (/\btimber/.test(t)) r.base = "Timber"; else if (/sandwich|\bpanel/.test(t)) r.base = "Panel";
+    else if (/\b(stud|drywall|dry\s*lining|plasterboard|gypsum|partition|flexible)/.test(t)) r.base = "Drywall";
+    else if (/\b(block|brick|concrete|masonry|rigid)/.test(t)) r.base = "Rigid";
+  }
+  if (/\b(linear|gap seal|joint)/.test(t)) r.service = "linear";
+  else if (/\b(several|mixed|multiple services)/.test(t)) r.service = "mixed";
+  else if (/\bbus-?bar/.test(t)) r.service = "busbar";
+  else if (/\b(trunking|duct)/.test(t)) r.service = "trunking";
+  else if (/\bunistrut/.test(t)) r.service = "unistrut";
+  else if (/\bempty|blank/.test(t)) r.service = "empty";
+  else if (/\bconduit/.test(t)) r.service = "conduit";
+  else if (/\bcopper/.test(t)) r.service = "copper";
+  else if (/\b(alupex|multi\s*layer|mlcp)/.test(t)) r.service = "alupex";
+  else if (/\bpex\b|pipe.in.pipe/.test(t)) r.service = "pex";
+  else if (/\b(steel|iron|black pipe|galv|gas)/.test(t)) r.service = "steel";
+  else if (/\b(pvc|upvc|plastic|hdpe|abs|pp|polypropylene|polyethylene|pe|pb|polybutylene|geberit|wavin|rehau|valsir|uponor|aquatherm|polo-kal|huliot)\b/.test(t)) r.service = "plastic";
+  else if (/\b(cable|tray|wiring|swa)/.test(t)) r.service = "cables";
+  if (r.service === "plastic"){
+    const brand = BRANDS.find(b => t.includes(b.toLowerCase().split(" ")[0]) && (b.split(" ").length < 2 || t.includes(b.toLowerCase().split(" ")[1].toLowerCase())));
+    if (brand){ r.plasticMat = "Composite"; r.brand = brand; }
+    else if (/\b(pvc|upvc|pvc-u|pvc-c|cpvc)\b/.test(t)) r.plasticMat = "PVC";
+    else if (/\b(pp|polypropylene)\b/.test(t)) r.plasticMat = "PP";
+    else if (/\b(pb|polybutylene)\b/.test(t)) r.plasticMat = "PB";
+    else if (/\b(pe|hdpe|abs|san|polyethylene)\b/.test(t)) r.plasticMat = "PE";
+  }
+  if (/(no lagging|no insulation|uninsulated|un-insulated|bare|not insulated)/.test(t)) r.insulation = "none";
+  else if (/(armaflex|kaiflex|elastomeric|nitrile|rubber)/.test(t)) r.insulation = "elastomeric";
+  else if (/phenolic|kooltherm/.test(t)) r.insulation = "phenolic";
+  else if (/\bpu\b|polyurethane/.test(t)) r.insulation = "pu";
+  else if (/pe foam|\bfoam\b/.test(t)) r.insulation = "pe";
+  else if (/(rockwool|rock wool|stone wool|stonewool|mineral wool)/.test(t)) r.insulation = "stone";
+  else if (/(glass wool|glasswool|fibreglass|fiberglass)/.test(t)) r.insulation = "glass";
+  let mins = null, m;
+  if ((m = t.match(/\bei\s*-?\s*(\d{2,3})/))) mins = +m[1];
+  else if ((m = t.match(/(\d{2,3})\s*(?:min|mins|minute|minutes)\b/))) mins = +m[1];
+  else if ((m = t.match(/(\d(?:\.\d)?)\s*(?:hr|hrs|hour|hours)\b/))) mins = Math.round(+m[1]*60);
+  else if (/\b(half an hour|half hour)/.test(t)) mins = 30;
+  else if (/\b(an|one) hour\b/.test(t)) mins = 60;
+  else if (/\btwo hours?\b/.test(t)) mins = 120;
+  else if (/\bthree hours?\b/.test(t)) mins = 180;
+  else if (/\bfour hours?\b/.test(t)) mins = 240;
+  if (mins){ r.rating = RATINGS.find(x => x >= mins) || 240; if (m) t = t.replace(m[0], " "); }
+  const thk = t.match(new RegExp(`(\\d{2,3})\\s*(?:mm|mil|mils|millimet\\w*)?\\s*(?:thick\\s*)?(?:\\w+\\s+){0,2}?(?:${WALL_WORDS})`))
+    || t.match(new RegExp(`(?:${WALL_WORDS})\\w*\\s+(?:of\\s+|is\\s+)?(\\d{2,3})\\s*(?:mm|mil|mils)?(?!\\s*(?:mm\\s*)?(?:${SVC_WORDS}))\\b`));
+  if (thk){ r.thk = +thk[1]; t = t.replace(thk[1], " "); }
+  const dia = t.match(/(?:ø|dia\w*|od)\s*(\d{1,3})/) || t.match(new RegExp(`(\\d{1,3})\\s*(?:mm|mil)?\\s*(?:od\\s*)?(?:\\w+\\s+){0,1}?(?:${SVC_WORDS})`));
+  if (dia && SIZED.includes(r.service)) r.dia = +dia[1];
+  const jw = r.service === "linear" && t.match(/(\d{1,3})\s*(?:mm)?\s*(?:wide|gap|joint)/);
+  if (jw){ r.openW = +jw[1]; delete r.openH; }
+  for (const k of Object.keys(r)) if (r[k] === undefined) delete r[k];
+  return r;
+}
+function readText(){
+  const text = S.askText.trim();
+  if (!text){ toast("Type what you’re sealing first."); return; }
+  const r = parseText(text);
+  if (!Object.keys(r).length){ S.note = {warn:true, text:"Couldn’t pick anything out of that — fill in the boxes instead."}; render(); return; }
+  for (const k of Object.keys(r)){ S.q[k] = r[k]; delete S.fromPhoto[k === "openW" || k === "openH" ? "opening" : k]; }
+  if (r.service && r.service !== "plastic"){ delete S.q.plasticMat; delete S.q.brand; }
+  const n = Object.keys(r).filter(k => k !== "openH").length;
+  S.note = {text:`Filled in ${n} box${n>1?"es":""} from your description — check them below.`};
+  render();
+}
+
+/* ---------- photo (demo: sample readings) ---------- */
+const SCAN_SAMPLES = [
+  {summary:"One steel pipe through a block wall. No insulation on the pipe. The tape across the pipe reads about 60 mm and the hole looks about 150 mm square.",
+   surface:"Wall", base:"Rigid", service:"steel", dia:63, insulation:"none", openW:150, openH:150},
+  {summary:"A copper pipe with black foam insulation through a plasterboard stud wall. Looks like 22 mm copper in a roughly 100 mm hole.",
+   surface:"Wall", base:"Drywall", service:"copper", dia:22, insulation:"elastomeric", openW:100, openH:100},
+  {summary:"A grey plastic waste pipe through a concrete floor, seen from below. Markings suggest 110 mm PVC.",
+   surface:"Floor", base:"Rigid", service:"plastic", dia:110, plasticMat:"PVC"},
+  {summary:"A cable tray with a bundle of cables through a block wall. The opening is about 300 wide by 150 high.",
+   surface:"Wall", base:"Rigid", service:"cables", dia:21, openW:300, openH:150}
+];
+let scanN = 0;
+function takePhoto(file){
+  if (!file || !/^image\//.test(file.type)){ toast("Choose a photo."); return; }
+  if (S.photo && S.photo.url) URL.revokeObjectURL(S.photo.url);
+  S.photo = {busy:true, url:URL.createObjectURL(file)}; S.step = 2; S.view = "flow"; render(); scrollTop();
+  setTimeout(() => {
+    if (!S.photo || !S.photo.busy) return;
+    S.photo = {busy:false, url:S.photo.url, r:SCAN_SAMPLES[scanN++ % SCAN_SAMPLES.length]};
+    if (S.view === "flow" && S.step === 2) render();
+  }, 1600);
+}
+function usePhoto(){
+  const r = S.photo && S.photo.r; if (!r) return;
+  S.q = {}; S.fromPhoto = {}; S.touched = false; S.note = null; S.sel = null;
+  for (const k of ["surface","base","thk","service","dia","plasticMat","brand","insulation","rating","openW","openH"]) if (!isEmpty(r[k])){ S.q[k] = r[k]; S.fromPhoto[k === "openW" || k === "openH" ? "opening" : k] = true; }
+  go(3);
+}
+
+/* ---------- helpers ---------- */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function valText(k, q){
+  const v = q[k];
+  if (k === "opening") return q.service === "linear" ? (q.openW ? `${q.openW} mm wide` : "") : (q.openW && q.openH ? `${q.openW} × ${q.openH} mm` : "");
+  if (isEmpty(v)) return "";
+  if (k === "service") return SVC_NAME[v] || v;
+  if (k === "base") return (q.surface === "Floor" ? FLOOR_NAME : WALL_NAME)[v] || v;
+  if (k === "insulation") return INS_NAME[v] || v;
+  if (k === "plasticMat") return Object.fromEntries(PLASTICS)[v] || v;
+  if (k === "rating") return `EI ${v}`;
+  if (k === "dia") return `Ø${v} mm`;
+  if (k === "thk") return `${v} mm`;
+  return v;
+}
+function toast(t){ const el = document.getElementById("toast"); el.textContent = t; el.classList.remove("hide"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add("hide"), 3200); }
+function scrollTop(){ window.scrollTo(0,0); }
+function summary(q){
+  const parts = [];
+  if (q.service) parts.push(`${q.dia?`Ø${q.dia} mm `:""}${lc(SVC_NAME[q.service]||"")}${q.brand?` (${q.brand})`:""}`);
+  if (q.insulation && q.insulation !== "none" && INSULABLE.includes(q.service)) parts.push(`with ${lc(INS_NAME[q.insulation])} insulation`);
+  if (q.thk && q.base) parts.push(`through a ${q.thk} mm ${lc(valText("base", q))}`);
+  if (q.rating) parts.push(`at EI ${q.rating}`);
+  return parts.join(" ") || "this penetration";
+}
+function maxStep(){ if (S.sel) return 5; if (!missingOf(S.q).length && S.touched) return 4; return 3; }
+function go(n){ S.step = n; S.view = "flow"; render(); scrollTop(); }
+function guideBadge(d){ const g = guideBy[d.guide]; return `<span class="badge prod">${esc(g.short)}</span>`; }
+function srcLine(d){ const g = guideBy[d.guide]; return `${g.name} guide · page ${d.page}${d.code ? ` · ${d.code}` : ""}`; }
+
+/* ---------- views ---------- */
+function vStepper(){
+  const reach = Math.max(maxStep(), S.photo ? 2 : 1);
+  return `<nav class="stepper" aria-label="Steps"><ol>${STEPS.map((s,i) => {
+    const n = i+1, skipped = n <= 2 && n < S.step && !S.photo;
+    const cls = n === S.step ? "cur" : skipped ? "" : n < S.step ? "done" : "";
+    const can = n !== S.step && (n <= reach) && !(n === 2 && !S.photo);
+    return `<li class="${cls}"><button data-step="${n}" ${can?"":"disabled"} ${n===S.step?'aria-current="step"':""}><span class="n">${skipped ? "–" : n < S.step ? "✓" : n}</span><span class="lbl">${s}${skipped?" (skipped)":""}</span></button></li>`;
+  }).join("")}</ol></nav>`;
+}
+function head(n, title, sub){ return `<div class="stephead"><span class="eyebrow">Step ${n} of 5</span><h1>${title}</h1>${sub?`<p class="muted" style="margin:0">${sub}</p>`:""}</div>`; }
+
+/* 1 — photo */
+function vPhoto(){
+  const desk = isDesk();
+  const picker = `<div class="drop" id="drop" role="button" tabindex="0" data-act="pick">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M4 8h3l2-3h6l2 3h3v12H4z"/></svg>
+      <span class="mob-only stack" style="width:100%;max-width:340px;gap:8px"><button class="btn primary block" data-act="camera" style="min-height:60px">Take a photo</button><button class="btn block" data-act="pick">Choose from photos</button></span>
+      <span class="desk-only"><span class="btn primary" style="min-height:56px">Upload a photo</span></span>
+      <span class="small muted hint-desk">or drag a photo here</span>
+    </div>`;
+  return `<div class="stack">
+    ${head(1, desk ? "Upload a photo (optional)" : "Take a photo of the penetration", desk ? "If you have a photo of the opening, the guide reads what it can from it. You can skip this and type the details in." : "The guide reads what it can from the photo. You’ll check and add the rest next.")}
+    <div class="two">
+      <div class="stack">${picker}<button class="btn ${desk?"dark":""} block" data-act="skipPhoto">${desk?"Skip — enter details by hand":"No photo — enter details by hand"}</button></div>
+      <section class="card stack"><h3>For a good photo</h3><ul class="list">
+        <li><span class="dot">1</span><span>Get the whole opening in shot, square on.</span></li>
+        <li><span class="dot">2</span><span>Hold a tape measure across the pipe and the hole — it helps with sizes.</span></li>
+        <li><span class="dot">3</span><span>Show any insulation where it meets the wall or floor.</span></li></ul>
+        <p class="small muted" style="margin:0">Fire rating and thickness can’t be seen in a photo — you’ll add those in step 3.</p></section>
+    </div></div>`;
+}
+
+/* 2 — read */
+function vRead(){
+  const p = S.photo;
+  if (!p) return vPhoto();
+  const keys = ["surface","base","thk","service","dia","plasticMat","insulation","rating","opening"];
+  let out;
+  if (p.busy) out = `<div class="card row" style="flex-wrap:nowrap;min-height:80px"><span class="spin"></span><span>Reading the photo…</span></div>`;
+  else {
+    const r = p.r;
+    const rows = keys.filter(k => k !== "plasticMat" || r.service === "plastic").map(k => {
+      const v = valText(k, r);
+      return `<li><span class="k">${label(k, r)}</span><span class="v ${v?"":"no"}">${v ? esc(v) : "Not visible — add in step 3"}</span></li>`;
+    }).join("");
+    out = `<section class="card stack"><div class="row" style="justify-content:space-between"><h3>What the guide can see</h3><span class="badge warn">Demo reading</span></div>
+      <p style="margin:0">${esc(r.summary)}</p><ul class="seen">${rows}</ul>
+      <button class="btn primary block" data-act="usePhoto">Next: check &amp; add details</button>
+      <p class="small muted" style="margin:0">Nothing is searched until you’ve checked every value.</p></section>`;
+  }
+  return `<div class="stack">${head(2, "Reading your photo", "The guide pulls in what it can see. You’ll confirm it next.")}
+    <div class="two"><div class="stack"><img class="scanimg" src="${p.url}" alt="Your photo"><button class="btn block" data-act="retake">Use a different photo</button></div><div class="stack">${out}</div></div></div>`;
+}
+
+/* 3 — details */
+function fieldBox(k, inner, opts={}){
+  const q = S.q, req = required(q).includes(k), miss = S.touched && req && !filled(k, q), photo = S.fromPhoto[k];
+  return `<section class="field ${photo?"photo":""} ${miss?"miss":""} ${opts.wide?"wide":""}" id="f-${k}" aria-label="${label(k)}">
+    <div class="lab"><strong>${label(k)}</strong>${photo?`<span class="from">From photo — check</span>`:req?`<span class="req">Required</span>`:`<span class="opt">Optional</span>`}</div>
+    ${inner}${opts.help?`<p class="help">${opts.help}</p>`:""}</section>`;
+}
+function chips(k, opts){ return `<div class="row">${opts.map(([v,l]) => `<button class="chip ${String(S.q[k] ?? "")===String(v)?"on":""}" data-set="${k}" data-val="${esc(v)}">${esc(l)}</button>`).join("")}</div>`; }
+function numBox(k, ph, val){ return `<label class="sr" for="in-${k}">${ph}</label><input type="number" inputmode="numeric" id="in-${k}" data-num="${k}" placeholder="${ph}" value="${val||""}">`; }
+function vDetails(){
+  const q = S.q, F = [];
+  F.push(fieldBox("surface", chips("surface", [["Wall","Wall"],["Floor","Floor"]])));
+  F.push(fieldBox("base", q.surface ? chips("base", q.surface === "Floor" ? FLOORS : WALLS) : `<p class="help" style="margin:0">Choose wall or floor first.</p>`));
+  const thkChips = q.surface === "Floor" ? [100,125,150,200] : [75,100,120,150];
+  F.push(fieldBox("thk", `<div class="row">${thkChips.map(v => `<button class="chip ${q.thk==v?"on":""}" data-set="thk" data-val="${v}">${v} mm</button>`).join("")}</div>
+    <div class="numrow">${numBox("thk", "Other, mm", q.thk && !thkChips.includes(q.thk) ? q.thk : "")}</div>`, {help:`Overall ${q.surface === "Floor" ? "floor" : "wall"} thickness — needed to check it meets the detail’s minimum.`}));
+  F.push(fieldBox("rating", chips("rating", RATINGS.map(v => [v, `EI ${v}`])), {help:"From the fire strategy drawings or the site supervisor."}));
+  F.push(fieldBox("service", chips("service", SERVICES), {wide:true}));
+  if (SIZED.includes(q.service)) F.push(fieldBox("dia", `<div class="row">${(DIA_CHIPS[q.service]||[]).map(v => `<button class="chip ${q.dia==v?"on":""}" data-set="dia" data-val="${v}">Ø${v}</button>`).join("")}</div>
+      <div class="numrow">${numBox("dia", "Other, mm", q.dia && !(DIA_CHIPS[q.service]||[]).includes(q.dia) ? q.dia : "")}</div>`, {help: q.service === "cables" ? "Largest single cable. Bundle limits are shown on each detail." : q.service === "conduit" ? "Outside diameter of the conduit." : "Outside diameter of the pipe, without insulation."}));
+  if (q.service === "plastic"){
+    F.push(fieldBox("plasticMat", chips("plasticMat", PLASTICS), {help:"Check the markings printed on the pipe."}));
+    if (q.plasticMat === "Composite") F.push(fieldBox("brand", chips("brand", BRANDS.map(b => [b,b])), {help:"Composite and acoustic pipes are tested brand by brand."}));
+  }
+  if (INSULABLE.includes(q.service)) F.push(fieldBox("insulation", chips("insulation", INSUL), {help:"Leave as <strong>Not sure</strong> to see every option — each detail tells you what insulation it needs.", wide:true}));
+  F.push(fieldBox("opening", q.service === "linear" ? `<div class="numrow">${numBox("openW", "Width mm", q.openW)}<span class="small muted">mm</span></div>` :
+    `<div class="numrow">${numBox("openW", "Width mm", q.openW)}<span class="x">×</span>${numBox("openH", "Height mm", q.openH)}</div>`,
+    {help: q.service === "linear" ? "Width of the gap between the two elements, in mm." : "Width × height of the hole, in mm. For a round hole enter the diameter twice."}));
+  return `<div class="stack">
+    ${head(3, "Check and add the details", S.photo && S.photo.r ? "Values from the photo are in amber — check each one. Fill in anything missing." : "Fill in every required box. Then the guide searches all six Protecta guides for tested details that fit.")}
+    <details class="desc" ${S.askText?"open":""}><summary>Or type a description to fill these in</summary>
+      <div class="stack" style="margin-top:10px">
+        <textarea class="f" id="ask" rows="2" placeholder="e.g. 54 copper, Armaflex, 100 stud wall, 60 min, 150x150 hole">${esc(S.askText)}</textarea>
+        <button class="btn dark" data-act="ask" style="align-self:flex-start">Fill in the boxes</button>
+        ${S.note ? `<p class="note ${S.note.warn?"warn":""}">${esc(S.note.text)}</p>`:""}
+      </div></details>
+    <div class="form">${F.join("")}</div>
+    <div class="actionbar" id="bar">${barHtml()}</div>
+  </div>`;
+}
+function barHtml(){
+  const miss = missingOf(S.q);
+  const msg = miss.length ? `<strong>${miss.length} still needed:</strong> ${miss.map(k => label(k).toLowerCase()).join(", ")}` : `<strong>Ready.</strong> ${esc(summary(S.q))}`;
+  return `<span class="msg">${msg}</span><button class="btn primary" data-act="search">Find details</button>`;
+}
+
+/* 4 — matches */
+function vMatches(){
+  const q = S.q;
+  const yours = `<div class="yours">${required(q).concat(INSULABLE.includes(q.service) && q.insulation ? ["insulation"] : []).filter(k => k !== "surface").map(k => `<span>${esc(valText(k,q))}</span>`).join("")}<button class="linkbtn small" data-step="3">Edit</button></div>`;
+  let body;
+  if (q.service === "mixed") body = noMatch("Search each service separately", "The guides test one type of service per drawing. FR Board and EX Mortar allow several services in one aperture (see the guide rules in the library) — search for each service on its own, then check the spacing rules before sealing.");
+  else {
+    const {hits, near} = findMatches(q);
+    if (!hits.length){
+      const uniq = [], seen = new Set();
+      for (const n of near){ if (!seen.has(n.why.need)){ seen.add(n.why.need); uniq.push(n); } }
+      body = noMatch("No tested detail for this", `Nothing in the six Protecta guides covers ${esc(summary(q))} in ${q.service === "linear" ? `a ${q.openW} mm joint` : `a ${q.openW} × ${q.openH} mm opening`}. Don’t seal it yet.`,
+        uniq.slice(0,4).map(n => `<li><span class="dot">!</span><span>A tested detail exists for ${esc(n.why.need)} (${esc(guideBy[n.d.guide].short)}) — <button class="linkbtn" data-ref="${n.d.id}">view it for reference</button>.</span></li>`).join(""));
+    } else {
+      const prods = {}; for (const h of hits) prods[h.d.guide] = (prods[h.d.guide]||0) + 1;
+      if (!prods[S.prodFilter]) S.prodFilter = "all";
+      const list = hits.filter(h => S.prodFilter === "all" || h.d.guide === S.prodFilter);
+      const shown = list.slice(0, S.showN || 24);
+      body = `<section class="stack">
+        <h2>${hits.length === 1 ? "1 tested detail fits" : `${hits.length} tested details fit`}</h2>
+        <p class="small muted" style="margin:0">Closest rating first. Pick the one that suits the job — each shows the product, the insulation it needs and anything to check.</p>
+        ${Object.keys(prods).length > 1 ? `<div class="chiprow" aria-label="Filter by product"><button class="chip ${S.prodFilter==="all"?"on":""}" data-prod="all">All products (${hits.length})</button>${Object.entries(prods).map(([k,n]) => `<button class="chip ${S.prodFilter===k?"on":""}" data-prod="${k}">${esc(guideBy[k].short)} (${n})</button>`).join("")}</div>`:""}
+        <div class="results">${shown.map(resultCard).join("")}</div>
+        ${list.length > shown.length ? `<button class="btn" data-act="more" style="align-self:center">Show ${Math.min(24, list.length - shown.length)} more</button>`:""}
+      </section>`;
+    }
+  }
+  return `<div class="stack">${head(4, "Matching details", "")}${yours}${body}</div>`;
+}
+function resultCard(h){
+  const d = h.d, r = h.row, ei = r ? r.ei : d.ei, ends = r ? r.ends : d.ends;
+  const lines = [
+    ["Rating", `EI ${ei}${ends?` · ${ends}`:""}${(r?r.e:d.e)?` · E ${r?r.e:d.e}`:""}`],
+    ["Tested in", d.cons.replace(/^IN /,"").toLowerCase()],
+    r ? ["Your row", `${r.label}${r.dia?` ≤Ø${r.dia}`:""}`] : d.maxDia ? ["Max size", `Ø${d.maxDia} mm${d.bundleMax && d.bundleMax !== d.maxDia ? ` single, bundles ≤ Ø${d.bundleMax}` : ""}`] : d.svcRect ? ["Max size", `${d.svcRect[0]} × ${d.svcRect[1]} mm`] : null,
+    openingRule(d) ? ["Opening", openingRule(d).replace(/^Opening up to |^Gap around the service up to /, m => m.startsWith("Gap") ? "gap ≤ " : "")] : null
+  ].filter(Boolean);
+  const checks = h.checks.filter(c => c !== "thickness" || true);
+  return `<article class="result">
+    <img class="thumb" src="${img(d.id)}" alt="Drawing: ${esc(d.title)}" loading="lazy">
+    <div class="body">
+      <div class="row">${guideBadge(d)}${ei > S.q.rating ? `<span class="badge grey">Gives EI ${ei}</span>`:""}${checks.length ? `<span class="badge warn">Check ${checks.join(", ")}</span>`:""}</div>
+      <h3>${esc(d.title)}</h3>
+      <div class="insline"><b>Insulation</b>${esc(insShort(d, r))}</div>
+      <dl class="kv">${lines.map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+      <p class="small muted" style="margin:0">${esc(srcLine(d))}</p>
+      <button class="btn primary block" data-select="${d.id}" data-row="${r?esc(JSON.stringify(r)):""}">Select this detail</button>
+    </div></article>`;
+}
+function noMatch(title, text, extra=""){
+  return `<section class="warnbox stack" aria-label="${esc(title)}">
+    <h2 style="color:inherit">${esc(title)}</h2><p style="margin:0">${text}</p>
+    <p class="small" style="margin:0"><strong>The guide never guesses an installation method.</strong> Contact the Parkwest office before sealing, or change the details.</p>
+    ${extra?`<ul class="list">${extra}</ul>`:""}
+    <button class="btn block" data-step="3">Change the details</button>
+  </section>`;
+}
+
+/* 5 — review & install (also used for library and reference views) */
+function vReview(d, row, q, mode){
+  const g = guideBy[d.guide], steps = method(d, row, q), key = d.id + (row ? "|" + row.label + row.dia + row.ends : "");
+  const done = S.done[key] || (S.done[key] = {});
+  const nDone = steps.filter((_,i) => done[i]).length;
+  const ins = insCallout(d, row, q), qty = quantities(d, row, q);
+  const ei = row ? row.ei : d.ei, e = row ? row.e : d.e, ends = row ? row.ends : d.ends;
+  const facts = [
+    ["Product", g.name], ["Fire rating", ei ? `EI ${ei}${e?` (E ${e})`:""}` : (e ? `E ${e}` : "See table")], ["Pipe ends", ends || "—"],
+    ["Services", d.kinds.map(k => KIND_SHORT[k]||k).join(", ")], ["Tested in", d.cons], ["Size", row ? `${row.label}${row.dia?` ≤Ø${row.dia} mm`:""}` : d.maxDia ? `up to Ø${d.maxDia} mm` : "—"],
+    ["Opening", openingRule(d) || "See drawing"], ["Source", `${g.name} guide, page ${d.page}`], ["Reference", d.code || "—"]
+  ];
+  const tbl = d.table ? `<section class="card stack"><h3>Table from the drawing</h3><div class="tablewrap"><table class="full"><thead><tr>${d.table.head.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${d.table.rows.map((r, ri) => `<tr class="${row && row.ri === ri ? "hit" : ""}">${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${row?`<p class="small muted" style="margin:0">Your row: <strong>${esc(row.label)}${row.dia?` ≤Ø${row.dia} mm`:""} · EI ${row.ei}${row.ends?" "+row.ends:""}</strong></p>`:""}</section>` : "";
+  const top = mode === "install" ? head(5, "Review and install", "") :
+    `<button class="btn sm" data-act="${mode==="ref"?"closeRef":"backLib"}" style="align-self:flex-start">← Back to ${mode==="ref"?"matches":"library"}</button>`;
+  const yours = mode === "install" ? `<section class="card stack"><h3>Your penetration</h3><dl class="kv">${required(q).concat(INSULABLE.includes(q.service)&&q.insulation?["insulation"]:[]).map(k => `<dt>${label(k,q)}</dt><dd>${esc(valText(k,q))}</dd>`).join("")}</dl></section>` :
+    mode === "ref" ? `<div class="warnbox small"><strong>For reference only.</strong> This detail doesn’t cover your penetration — don’t install it without the office’s OK.</div>` : "";
+  return `<div class="stack">
+    ${top}
+    <div class="row">${guideBadge(d)}<span class="badge ok">✓ From the Protecta guide</span></div>
+    <h1 style="font-size:28px">${esc(d.title)}</h1>
+    <p class="muted" style="margin:0">${esc(d.cons)}</p>
+    <div class="review">
+      <div class="stack">
+        ${yours}
+        <section class="callout ${ins.cls}"><span class="small" style="font-weight:700;text-transform:uppercase;letter-spacing:.3px">Insulation</span><h3>${esc(ins.title)}</h3><p style="margin:0">${esc(ins.text)}</p></section>
+        <section class="card stack" id="method">
+          <div class="row" style="justify-content:space-between"><h3>What needs to be done</h3><span class="small muted" id="prog-t">${nDone} of ${steps.length} done</span></div>
+          <div class="progress" aria-hidden="true"><i id="prog" style="width:${Math.round(nDone/steps.length*100)}%"></i></div>
+          <ol class="method">${steps.map((s,i) => `<li class="${done[i]?"ticked":""}"><label><input type="checkbox" data-tick="${i}" data-key="${esc(key)}" ${done[i]?"checked":""}><span><span class="t">${i+1}. ${esc(s.t)}</span><span class="x">${esc(s.x)}</span>${s.q?`<span class="q">${esc(s.q)}</span>`:""}</span></label></li>`).join("")}</ol>
+          <div id="donebox">${nDone === steps.length ? doneBox() : ""}</div>
+        </section>
+        <section class="card stack"><h3>What you’ll need</h3>
+          <table class="mats"><tbody>${qty.map(([a,n,x]) => `<tr><td><strong>${esc(a)}</strong><br><span class="small muted">${esc(x)}</span></td><td class="qty">${esc(n)}</td></tr>`).join("")}</tbody></table>
+          <p class="small muted" style="margin:0">Quantities are a rough guide${q.openW?` for your ${valText("opening", q)} opening`:""} — check against the drawing.</p>
+        </section>
+        ${tbl}
+        <section class="card stack"><h3>Exactly as written on the drawing</h3><ul class="list">${d.callouts.map(c => `<li><span class="dot">•</span><span>${esc(c)}</span></li>`).join("")}</ul></section>
+        <details class="card guidebox"><summary><strong>General instructions — ${esc(g.name)}</strong><span class="small muted"> · ${g.steps.length} steps from page 1 of the guide</span></summary>
+          <div class="stack" style="margin-top:10px">
+            <ol class="gsteps">${g.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+            ${g.rules.map(r => `<div><strong>${esc(r.k)}</strong><p class="small" style="margin:4px 0 0">${esc(r.t)}</p></div>`).join("")}
+          </div></details>
+      </div>
+      <div class="side stack">
+        <section class="card stack"><h3>Drawing</h3>
+          <div class="drawing ${S.zoom?"zoom":""}"><img src="${img(d.id)}" alt="Installation drawing: ${esc(d.title)}"></div>
+          <div class="row"><button class="btn sm" data-act="zoom">${S.zoom?"Fit to screen":"Zoom drawing"}</button><a class="btn sm" href="${g.file}#page=${d.page}" target="_blank" rel="noopener">Open guide p.${d.page}</a></div>
+        </section>
+        <section class="card"><dl class="kv">${facts.map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl></section>
+        ${mode === "install" ? `<div class="row"><button class="btn sm" data-step="4">← Other matches</button><button class="btn sm" data-act="newSearch">New search</button></div>` : ""}
+      </div>
+    </div>
+  </div>`;
+}
+function doneBox(){ return `<div class="donebox">All steps ticked. Photograph both sides and fit the label as normal.</div>`; }
+
+/* ---------- library ---------- */
+function libMatches(){
+  const terms = S.libSearch.toLowerCase().replace(/ø/g,"").replace(/\bei\s+(\d)/g,"ei$1").split(/\s+/).filter(Boolean);
+  return LIB.filter(d => {
+    if (S.libGuide !== "all" && d.guide !== S.libGuide) return false;
+    if (S.libKind !== "all" && !d.kinds.includes(S.libKind)) return false;
+    if (!terms.length) return true;
+    const hay = d._hay || (d._hay = [d.title, d.cons, d.kinds.map(k => SVC_NAME[k]).join(" "), guideBy[d.guide].name, d.code||"", "p" + d.page, d.mats.join(" "), d.callouts.join(" "),
+      d.walls.map(w => WALL_NAME[w]).join(" "), d.floors.map(f => FLOOR_NAME[f]).join(" "), /elastomeric/i.test(d.callouts.join(" ")) ? "armaflex kaiflex" : "", /stone wool/i.test(d.callouts.join(" ")) ? "rockwool" : ""].join(" ").toLowerCase());
+    const nums = [d.ei, d.maxDia, d.minThk, ...(d.opts||[]).flatMap(o => [o.dia, o.ei])];
+    return terms.every(t => /^(ei)?\d+$/.test(t) ? (t.startsWith("ei") ? d.ei == t.slice(2) || (d.opts||[]).some(o => o.ei == t.slice(2)) : nums.includes(Number(t))) : hay.includes(t));
+  });
+}
+function libListHtml(){
+  const items = libMatches();
+  if (!items.length) return `<div class="card stack"><h3>No details match</h3><p style="margin:0" class="muted">Try fewer words, e.g. “collar pvc 110”.</p></div>`;
+  const shown = items.slice(0, S.libLimit);
+  return shown.map(d => `<button class="libitem" data-open="${d.id}"><img src="${img(d.id)}" alt="" loading="lazy"><span class="stack" style="gap:4px"><strong>${esc(d.title)}</strong><span class="small muted">${esc(d.cons)}</span><span class="kinds">${guideBadge(d)}<span class="badge grey">p.${d.page}</span>${d.table?`<span class="badge grey">Size table</span>`:""}</span></span></button>`).join("")
+    + (items.length > shown.length ? `<button class="btn" data-act="libMore" style="grid-column:1/-1;justify-self:center">Show more (${items.length - shown.length} left)</button>` : "");
+}
+function libCount(){ return `${libMatches().length} of ${LIB.length} details`; }
+function vLibrary(){
+  const g = S.libGuide, k = S.libKind;
+  const pool = LIB.filter(d => g === "all" || d.guide === g);
+  const kinds = Object.keys(KIND_SHORT).filter(x => pool.some(d => d.kinds.includes(x)));
+  const cards = GUIDES.map(x => `<button class="guidecard ${g===x.key?"on":""}" data-guide="${x.key}"><strong>${esc(x.name)}</strong><span class="small muted">${esc(x.blurb)}</span><span class="small"><strong>${LIB.filter(d => d.guide===x.key).length}</strong> details · ${x.pages} pages</span></button>`).join("");
+  const gi = g !== "all" ? guideBy[g] : null;
+  return `<div class="stack" style="padding-top:18px">
+    <h1>Protecta guides</h1>
+    <p class="muted" style="margin:0">Six Protecta installation guides — ${LIB.length} tested details. The search in Find only answers from these.</p>
+    <div class="guides">${cards}</div>
+    ${gi ? `<section class="card stack"><div class="row" style="justify-content:space-between"><h2>${esc(gi.name)}</h2><div class="row"><a class="btn sm" href="${gi.file}" target="_blank" rel="noopener">Open PDF</a><button class="btn sm" data-guide="all">Show all guides</button></div></div>
+      ${gi.eta?`<p class="small muted" style="margin:0">Installation instructions to ${esc(gi.eta)}</p>`:""}
+      <details><summary><strong>General instructions (${gi.steps.length} steps) and rules</strong></summary><div class="stack" style="margin-top:10px"><ol class="gsteps">${gi.steps.map(s => `<li>${esc(s)}</li>`).join("")}</ol>${gi.rules.map(r => `<div><strong>${esc(r.k)}</strong><p class="small" style="margin:4px 0 0">${esc(r.t)}</p></div>`).join("")}</div></details></section>` : ""}
+    <label class="sr" for="libs">Search the details</label><input type="search" id="libs" placeholder="Search, e.g. collar pvc 110, timber wall, EI 120" value="${esc(S.libSearch)}" autocomplete="off">
+    <div class="chiprow" aria-label="Service">
+      <button class="chip ${k==="all"?"on":""}" data-kind="all">Any service</button>
+      ${kinds.map(x => `<button class="chip ${k===x?"on":""}" data-kind="${x}">${KIND_SHORT[x]} (${pool.filter(d=>d.kinds.includes(x)).length})</button>`).join("")}
+    </div>
+    <p class="small muted" style="margin:0" id="libcount">${libCount()}</p>
+    <div class="libgrid" id="liblist">${libListHtml()}</div>
+  </div>`;
+}
+
+/* ---------- render ---------- */
+function render(){
+  const app = document.getElementById("app");
+  let html, tab;
+  if (S.view === "library"){ html = vLibrary(); tab = "library"; }
+  else if (S.view === "libdetail"){ html = `<div style="padding-top:14px">${vReview(byId[S.libDetail], null, {}, "lib")}</div>`; tab = "library"; }
+  else if (S.view === "ref"){ html = `<div style="padding-top:14px">${vReview(byId[S.ref], null, S.q, "ref")}</div>`; tab = "find"; }
+  else {
+    const body = S.step === 1 ? vPhoto() : S.step === 2 ? vRead() : S.step === 3 ? vDetails() : S.step === 4 ? vMatches() : vReview(byId[S.sel.id], S.sel.row, S.q, "install");
+    html = vStepper() + `<div style="padding-top:14px">${body}</div>`;
+    tab = S.step <= 2 ? "scan" : "find";
+  }
+  app.innerHTML = html;
+  for (const n of ["find","scan","library"]){
+    document.getElementById("n-"+n).classList.toggle("on", tab === n);
+    document.getElementById("t-"+n).classList.toggle("on", tab === n);
+  }
+  const ask = document.getElementById("ask"); if (ask) ask.addEventListener("input", e => { S.askText = e.target.value; });
+  const libs = document.getElementById("libs");
+  if (libs) libs.addEventListener("input", e => { S.libSearch = e.target.value; S.libLimit = 60; document.getElementById("liblist").innerHTML = libListHtml(); document.getElementById("libcount").textContent = libCount(); });
+  for (const el of document.querySelectorAll("[data-num]")) el.addEventListener("input", e => {
+    const k = e.target.dataset.num, v = Number(e.target.value), f = k === "openW" || k === "openH" ? "opening" : k;
+    if (v > 0) S.q[k] = v; else delete S.q[k];
+    delete S.fromPhoto[f]; S.sel = null;
+    const box = e.target.closest(".field"); box.classList.remove("photo");
+    if (filled(f, S.q)) box.classList.remove("miss");
+    for (const c of box.querySelectorAll(".chip.on")) c.classList.remove("on");
+    const tag = box.querySelector(".from"); if (tag){ tag.className = "req"; tag.textContent = "Required"; }
+    document.getElementById("bar").innerHTML = barHtml();
+  });
+  const drop = document.getElementById("drop");
+  if (drop){
+    drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+    drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+    drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); takePhoto(e.dataTransfer.files[0]); });
+  }
+}
+
+/* ---------- events ---------- */
+document.getElementById("camfile").addEventListener("change", e => { takePhoto(e.target.files[0]); e.target.value = ""; });
+document.getElementById("pickfile").addEventListener("change", e => { takePhoto(e.target.files[0]); e.target.value = ""; });
+document.addEventListener("change", e => {
+  const t = e.target; if (!t.dataset || t.dataset.tick === undefined) return;
+  const done = S.done[t.dataset.key]; done[t.dataset.tick] = t.checked;
+  t.closest("li").classList.toggle("ticked", t.checked);
+  const all = document.querySelectorAll("[data-tick]"), n = [...all].filter(x => x.checked).length;
+  document.getElementById("prog").style.width = Math.round(n/all.length*100) + "%";
+  document.getElementById("prog-t").textContent = `${n} of ${all.length} done`;
+  document.getElementById("donebox").innerHTML = n === all.length ? doneBox() : "";
+});
+document.addEventListener("click", e => {
+  const t = e.target.closest("button, [data-act]"); if (!t || t.disabled) return;
+  if (t.dataset.go){
+    const g = t.dataset.go;
+    if (g === "library") S.view = "library";
+    else if (g === "scan"){ S.view = "flow"; S.step = S.photo ? 2 : 1; }
+    else { S.view = "flow"; if (S.step < 3) S.step = 3; }
+    render(); scrollTop(); return;
+  }
+  if (t.dataset.step){ const n = +t.dataset.step; if (n === 4 && missingOf(S.q).length){ S.touched = true; go(3); return; } go(n); return; }
+  if (t.dataset.set){
+    const k = t.dataset.set; let v = t.dataset.val;
+    if (["thk","dia","rating"].includes(k)) v = Number(v);
+    if (v === "") delete S.q[k]; else S.q[k] = v;
+    delete S.fromPhoto[k]; S.sel = null;
+    if (k === "service"){ delete S.q.dia; delete S.q.plasticMat; delete S.q.brand; if (!INSULABLE.includes(v)) delete S.q.insulation; if (v === "linear") delete S.q.openH; }
+    if (k === "plasticMat" && v !== "Composite") delete S.q.brand;
+    if (k === "surface"){ delete S.q.base; delete S.fromPhoto.base; }
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.prod){ S.prodFilter = t.dataset.prod; S.showN = 24; render(); return; }
+  if (t.dataset.select){ S.sel = {id:t.dataset.select, row:t.dataset.row ? JSON.parse(t.dataset.row) : null}; S.zoom = false; go(5); return; }
+  if (t.dataset.ref){ S.ref = t.dataset.ref; S.view = "ref"; S.zoom = false; render(); scrollTop(); return; }
+  if (t.dataset.guide){ S.libGuide = t.dataset.guide; S.libKind = "all"; S.libLimit = 60; render(); return; }
+  if (t.dataset.kind){ S.libKind = t.dataset.kind; S.libLimit = 60; render(); return; }
+  if (t.dataset.open){ S.libDetail = t.dataset.open; S.libY = window.scrollY; S.view = "libdetail"; S.zoom = false; render(); scrollTop(); return; }
+  const a = t.dataset.act; if (!a) return;
+  if (a === "camera"){ e.stopPropagation(); document.getElementById("camfile").click(); }
+  if (a === "pick"){ if (t.id === "drop" && !isDesk()) return; e.stopPropagation(); document.getElementById("pickfile").click(); }
+  if (a === "retake"){ S.photo = null; go(1); }
+  if (a === "skipPhoto") go(3);
+  if (a === "usePhoto") usePhoto();
+  if (a === "ask") readText();
+  if (a === "search"){
+    S.touched = true; S.sel = null; S.prodFilter = "all"; S.showN = 24;
+    const miss = missingOf(S.q);
+    if (miss.length){ render(); const el = document.getElementById("f-" + miss[0]); if (el) el.scrollIntoView({behavior:"smooth", block:"center"}); toast(`Add the ${label(miss[0]).toLowerCase()} first.`); return; }
+    go(4);
+  }
+  if (a === "more"){ S.showN = (S.showN || 24) + 24; render(); }
+  if (a === "libMore"){ S.libLimit += 60; document.getElementById("liblist").innerHTML = libListHtml(); }
+  if (a === "zoom"){ S.zoom = !S.zoom; render(); }
+  if (a === "closeRef"){ S.view = "flow"; render(); scrollTop(); }
+  if (a === "backLib"){ S.view = "library"; render(); window.scrollTo(0, S.libY || 0); }
+  if (a === "newSearch"){ S.q = {}; S.fromPhoto = {}; S.photo = null; S.sel = null; S.touched = false; S.askText = ""; S.note = null; go(1); }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey && e.target.id === "ask"){ e.preventDefault(); readText(); }
+  if ((e.key === "Enter" || e.key === " ") && e.target.id === "drop"){ e.preventDefault(); document.getElementById("pickfile").click(); }
+});
+
+async function loadLibrary(){
+  try {
+    const r = await fetch("library.json"); const j = await r.json();
+    LIB = j.details; GUIDES = j.guides; byId = Object.fromEntries(LIB.map(d => [d.id, d])); guideBy = Object.fromEntries(GUIDES.map(g => [g.key, g]));
+  } catch(e){ document.getElementById("app").innerHTML = '<div class="warnbox" style="margin-top:18px">Couldn’t load the detail library — refresh the page.</div>'; return; }
+  render();
+}
+document.getElementById("app").innerHTML = '<div class="row" style="padding-top:24px"><span class="spin"></span><span>Loading the Protecta guides…</span></div>';
+loadLibrary();
+</script>
+</body>
+</html>
